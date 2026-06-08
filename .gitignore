@@ -1,0 +1,18 @@
+# بيانات وملفات ناتجة
+data/
+*.png
+results.csv
+
+# مواد سرّية / خاصة — لا تُرفع على GitHub
+*.pdf
+*.xlsx
+tickers*.csv
+
+# بايثون
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# نظام
+.DS_Store

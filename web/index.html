@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌊 ماسح أنماط إليوت الموجية</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🌊 ماسح أنماط إليوت الموجية</h1>
+    <p class="sub">الأنماط الخمسة: Impulse دافعة · Diagonal قطرية · Zigzag زجزاج · Flat فلات · Triangle مثلث —
+       يعمل بالكامل في متصفحك، بدون سيرفر.</p>
+  </header>
+
+  <section class="panel">
+    <div class="controls">
+      <label class="file-btn">
+        📂 رفع ملفات CSV
+        <input type="file" id="files" accept=".csv" multiple hidden>
+      </label>
+      <span id="loaded" class="muted">لم تُحمّل بيانات بعد</span>
+
+      <div class="setting">
+        <label>أدنى درجة: <b id="minScoreVal">60</b></label>
+        <input type="range" id="minScore" min="0" max="100" value="60">
+      </div>
+      <div class="setting">
+        <label>النمط</label>
+        <select id="patFilter">
+          <option value="الكل">الكل</option>
+          <option>Impulse</option><option>Diagonal</option>
+          <option>Zigzag</option><option>Flat</option><option>Triangle</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>حساسية ZigZag: <b id="atrVal">1.5</b></label>
+        <input type="range" id="atrMult" min="0.5" max="3" step="0.1" value="1.5">
+      </div>
+      <label class="chk"><input type="checkbox" id="onlyValid" checked> القوانين المكتملة فقط</label>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="scan">🔎 الماسح</button>
+    <button class="tab" data-tab="detail">📈 التفاصيل والرسم</button>
+    <button class="tab" data-tab="bt">🧪 Backtest</button>
+  </nav>
+
+  <!-- تبويب الماسح -->
+  <section id="scan" class="tabpane active">
+    <div class="row">
+      <h2>النتائج</h2>
+      <button id="dlCsv" class="btn small">⬇️ تحميل CSV</button>
+    </div>
+    <div id="scanTable" class="tablewrap"><p class="muted">حمّل ملفات أولاً.</p></div>
+  </section>
+
+  <!-- تبويب التفاصيل -->
+  <section id="detail" class="tabpane">
+    <div class="controls">
+      <div class="setting"><label>السهم</label><select id="detTicker"></select></div>
+      <div class="setting"><label>النمط المكتشف</label><select id="detMatch"></select></div>
+    </div>
+    <div class="detail-grid">
+      <div class="chart-box"><canvas id="chart" width="900" height="460"></canvas></div>
+      <div id="detInfo" class="info-box"></div>
+    </div>
+  </section>
+
+  <!-- تبويب Backtest -->
+  <section id="bt" class="tabpane">
+    <div class="controls">
+      <div class="setting"><label>نسبة R: <b id="rrVal">2</b></label>
+        <input type="range" id="rr" min="1" max="4" step="0.5" value="2"></div>
+      <div class="setting"><label>أقصى أيام: <b id="holdVal">40</b></label>
+        <input type="range" id="hold" min="10" max="80" step="5" value="40"></div>
+      <div class="setting"><label>أدنى بنية: <b id="structVal">55</b></label>
+        <input type="range" id="minStruct" min="0" max="100" value="55"></div>
+      <button id="runBt" class="btn">▶️ تشغيل Backtest</button>
+    </div>
+    <div id="btResult" class="tablewrap"><p class="muted">شغّل الاختبار على البيانات المحمّلة.</p></div>
+  </section>
+
+  <footer>
+    <p class="muted">مبني على دورة "التحليل الموجي واستراتيجية التداول". منطق الكشف في
+      <code>elliott.js</code>. الدرجة النهائية = البنية × (0.70 + 0.30 × نسبة التأكيدات).</p>
+  </footer>
+
+  <script src="elliott.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
