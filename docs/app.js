@@ -24,20 +24,47 @@
   $("onlyValid").onchange = runScanner;
 
   // ───── رفع الملفات ─────
+  function ingest(name, txt) {
+    const df = E.parseCSV(txt);                       // يرمي خطأ لو الأعمدة ناقصة
+    if (df.close.length < 20) throw new Error("صفوف قليلة جداً (<20)");
+    data[name.replace(/\.csv$/i, "")] = df;
+  }
+
   $("files").onchange = async (ev) => {
     const files = [...ev.target.files];
-    let ok = 0;
+    const errors = [];
     for (const f of files) {
-      try {
-        const txt = await f.text();
-        const df = E.parseCSV(txt);
-        if (df.close.length >= 20) { data[f.name.replace(/\.csv$/i, "")] = df; ok++; }
-      } catch (e) { console.warn(f.name, e.message); }
+      try { ingest(f.name, await f.text()); }
+      catch (e) { errors.push(`${f.name}: ${e.message}`); }
     }
-    $("loaded").textContent = `✅ حُمّل ${Object.keys(data).length} سهم`;
+    finishLoad(errors);
+  };
+
+  // ───── بيانات تجريبية جاهزة ─────
+  $("loadSample").onclick = async () => {
+    const list = ["AAPL", "AMD", "LRCX", "NVDA", "MSFT", "NFLX"];
+    $("loaded").textContent = "⏳ جاري تحميل العينة...";
+    const errors = [];
+    for (const t of list) {
+      try {
+        const r = await fetch("sample/" + t + ".csv");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        ingest(t, await r.text());
+      } catch (e) { errors.push(`${t}: ${e.message}`); }
+    }
+    finishLoad(errors);
+  };
+
+  function finishLoad(errors) {
+    const el = $("loaded"), n = Object.keys(data).length;
+    if (n) el.innerHTML = `✅ حُمّل ${n} سهم`;
+    if (errors.length) {
+      const why = errors.slice(0, 2).join(" · ").replace(/أعمدة ناقصة[^·]*/g, "ليس ملف أسعار (يلزم High,Low,Close)");
+      el.innerHTML = (n ? `✅ ${n} سهم — ` : "") + `<span style="color:#f0807f">⚠️ رُفض ${errors.length}: ${why}</span>`;
+    }
     fillTickerSelect();
     runScanner();
-  };
+  }
 
   function opts() {
     return {
