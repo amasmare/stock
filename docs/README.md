@@ -10,7 +10,7 @@
 
 ### 2) محلياً عبر سيرفر بسيط (اختياري)
 ```bash
-cd web
+cd docs
 python -m http.server 8777
 # ثم افتح: http://localhost:8777
 ```
@@ -18,8 +18,7 @@ python -m http.server 8777
 ### 3) النشر على الإنترنت مجاناً (GitHub Pages)
 1. ارفع مجلد المشروع على GitHub.
 2. في المستودع: **Settings → Pages**.
-3. تحت *Build and deployment* اختر **Branch: main** و **Folder: /web** (أو انقل ملفات
-   `web/` إلى جذر المستودع واختر `/root`).
+3. تحت *Build and deployment* اختر **Branch: main** و **Folder: /docs**.
 4. احفظ — خلال دقيقة يصير لك **رابط موقع عام** تشاركه مع أي أحد. 🎉
 
 > لا يحتاج Streamlit ولا أي خدمة استضافة خاصة — صفحة ثابتة (static) تعمل على أي متصفح.
